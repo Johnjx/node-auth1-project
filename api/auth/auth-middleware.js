@@ -1,17 +1,13 @@
 const usersModel = require('../users/users-model')
 
-/*
-  If the user does not have a session saved in the server
 
-  status 401
-  {
-    "message": "You shall not pass!"
+function restricted(req, res, next) {
+  if(req.session.user == null) {
+    res.status(401).json({message: "You shall not pass!"});
+    return;
   }
-*/
-function restricted() {
-
+  next();
 }
-
 
 async function checkUsernameFree(req, res, next) {
   let { username } = req.body;
@@ -23,14 +19,6 @@ async function checkUsernameFree(req, res, next) {
   next();
 }
 
-/*
-  If the username in req.body does NOT exist in the database
-
-  status 401
-  {
-    "message": "Invalid credentials"
-  }
-*/
 async function checkUsernameExists(req, res, next) {
   const { username } = req.body;
 

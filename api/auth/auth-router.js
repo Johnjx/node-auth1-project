@@ -22,7 +22,6 @@ router.post('/login', checkUsernameExists, async (req, res, next) => {
       }
 
       req.session.user = req.existingUser;
-      console.log(req.session)
       res.json({message: `Welcome ${username}!`})
 
   } catch(err) {
@@ -30,17 +29,6 @@ router.post('/login', checkUsernameExists, async (req, res, next) => {
   }
   
 })
-
-/**
-  2 [POST] /api/auth/login { "username": "sue", "password": "1234" }
-
-  response:
-  status 200
-  {
-    "message": "Welcome sue!"
-  }
-
- */
 
 router.get('/logout', (req, res, next) => {
   res.send('hello from auth router logout')
