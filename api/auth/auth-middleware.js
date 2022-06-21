@@ -31,8 +31,16 @@ async function checkUsernameFree(req, res, next) {
     "message": "Invalid credentials"
   }
 */
-function checkUsernameExists() {
+async function checkUsernameExists(req, res, next) {
+  const { username } = req.body;
 
+  const existingUser = await usersModel.findBy({username}).first()
+  if (existingUser == null) {
+    next({ status: 401, message: "Invalid credentials" });
+    return;
+  }
+  req.existingUser = existingUser
+  next()
 }
 
 function checkPasswordLength(req, res, next) {

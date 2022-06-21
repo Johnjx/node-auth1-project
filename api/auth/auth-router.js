@@ -12,8 +12,23 @@ router.post('/register', checkUsernameFree, checkPasswordLength, async (req, res
   res.json({ user_id: user.user_id, username })
 })
 
-router.post('/login', (req, res, next) => {
-  res.send('hello from auth router login')
+router.post('/login', checkUsernameExists, async (req, res, next) => {
+  try {
+      const { username, password } = req.body;
+
+      if(bcrypt.compareSync(password, req.existingUser.password) == false){
+        next({status: 401, message: "Invalid credentials"})
+        return;
+      }
+
+      req.session.user = req.existingUser;
+      console.log(req.session)
+      res.json({message: `Welcome ${username}!`})
+
+  } catch(err) {
+      next(err)
+  }
+  
 })
 
 /**
@@ -25,11 +40,6 @@ router.post('/login', (req, res, next) => {
     "message": "Welcome sue!"
   }
 
-  response on invalid credentials:
-  status 401
-  {
-    "message": "Invalid credentials"
-  }
  */
 
 router.get('/logout', (req, res, next) => {
