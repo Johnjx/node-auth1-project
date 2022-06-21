@@ -1,8 +1,9 @@
 const router = require('express').Router()
 // Require `checkUsernameFree`, `checkUsernameExists` and `checkPasswordLength`
 // middleware functions from `auth-middleware.js`. You will need them here!
+const { checkUsernameFree, checkUsernameExists, checkPasswordLength } = require ('./auth-middleware')
 
-router.post('/register', (req, res, next) => {
+router.post('/register', checkUsernameFree, (req, res, next) => {
   res.send('hello from auth router reg')
 })
 

@@ -1,3 +1,5 @@
+const db = require('../../data/db-config')
+
 /*
   If the user does not have a session saved in the server
 
@@ -18,8 +20,14 @@ function restricted() {
     "message": "Username taken"
   }
 */
-function checkUsernameFree() {
-
+async function checkUsernameFree(req, res, next) {
+  let { username } = req.body;
+  const existingUser = await db('users').where({username}).first();
+  if (existingUser) {
+    next({ status: 422, message: "Username taken" });
+    return;
+  }
+  next();
 }
 
 /*
@@ -47,3 +55,10 @@ function checkPasswordLength() {
 }
 
 // Don't forget to add these to the `exports` object so they can be required in other modules
+
+module.exports = {
+  checkPasswordLength,
+  checkUsernameExists,
+  checkUsernameFree,
+  restricted
+}
