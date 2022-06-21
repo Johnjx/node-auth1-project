@@ -12,18 +12,6 @@ router.post('/register', checkUsernameFree, checkPasswordLength, async (req, res
   res.json({ user_id: user.user_id, username })
 })
 
-/**
-  1 [POST] /api/auth/register { "username": "sue", "password": "1234" }
-
-  response:
-  status 200
-  {
-    "user_id": 2,
-    "username": "sue"
-  }
-
- */
-
 router.post('/login', (req, res, next) => {
   res.send('hello from auth router login')
 })
